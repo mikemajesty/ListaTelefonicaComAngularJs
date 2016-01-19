@@ -33,6 +33,10 @@
             margin-right: auto;
             margin-top: 20px;
         }
+
+        .selecionado {
+            background-color: yellow;
+        }
     </style>
     <meta charset="utf-8" />
 
@@ -44,27 +48,43 @@
 
             $scope.contatos =
             [
-                { nome: "MIke", telefone: "15997624783" },
-                 { nome: "Natali", telefone: "15997625451" },
-                  { nome: "Pedro", telefone: "159976265454" }
+                { nome: "Mike", telefone: "15997624783" ,cor:"blue"},
+                 { nome: "Natali", telefone: "15997625451", cor: "pink" },
+                  { nome: "Pedro", telefone: "159976265454", cor: "gray" }
             ];
 
-
+            $scope.operadoras =
+            [
+                { nome: "OI", codigo: 11 },
+                { nome: "TIM", codigo: 15 },
+                { nome: "VIVO", codigo: 21 },
+                { nome: "CLARO", codigo: 36 }
+            ];
 
             $scope.AddContato = function (contato) {
 
                 $scope.contatos.push(contato);
+                // $scope.contatos.length;
                 delete $scope.contato;
-
             }
 
+            $scope.ApagarContatos = function (contatos) {
+                $scope.contatos = contatos.filter(function (contato) {
 
+                    if (!contato.selecionado) return contato;
+                });
 
+            }
+            $scope.isContatoSelecionado = function (contatos) {
+            
+                return contatos.some(function (contato) {
+                  
+                    return contato.selecionado;
+                })
+              
+            }
 
-
-
-
-        });
+        });/*  Fim  */
 
 
     </script>
@@ -72,14 +92,20 @@
 <body>
     <div ng-controller="ListaTelefonicaController" class="jumbotron">
         <h4 ng-bind="app"></h4>
-        <table class="table table-striped">
+        <table ng-show="contatos.length > 0" class="table table-condensed">
             <tr>
+                <th class="text-center label-success">Selecionar</th>
                 <th class="text-center label-success">Nome</th>
                 <th class="text-center label-success">Telefone</th>
+                <th class="text-center label-success">Operadora</th>
+                <th class="text-center label-success">Cores</th>
             </tr>
-            <tr ng-repeat="contato in contatos">
+            <tr ng-repeat="contato in contatos" ng-class="{selecionado: contato.selecionado}">
+                <th><input type="checkbox" ng-model="contato.selecionado" /> </th>
                 <td ng-bind="contato.nome"></td>
                 <td ng-bind="contato.telefone"></td>
+                <td ng-bind="contato.operadora.nome"></td>
+                <td><div style="width:50px; height:50px" ng-style="{'background-color': contato.cor}"></div> </td>
             </tr>
         </table>
         <hr />
@@ -87,7 +113,15 @@
 
         <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone" />
 
-        <button class="btn btn-info btn-lg btn-block" ng-click="AddContato(contato)">Adicionar</button>
-    </div>
+        <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
+            <option value="">Selecione um Operadora</option>
+        </select>
+
+        <button class="btn btn-info btn-lg btn-block" ng-click="AddContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar</button>
+        <br />
+        <button class="btn btn-info btn-lg btn-danger" ng-click="ApagarContatos(contatos)" ng-disabled="!isContatoSelecionado(contatos)">Remover</button>
+        <div ng-include="'footer.html'"></div>
+      </div>
+   
 </body>
 </html>
