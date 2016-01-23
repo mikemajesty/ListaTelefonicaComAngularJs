@@ -4,7 +4,7 @@
     <title>Lista telefonica</title>
     <script src="Scripts/angular.min.js"></script>
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
-
+    <script src="Scripts/angular-messages.min.js"></script>
     <style>
         .jumbotron {
             width: 500px;
@@ -41,14 +41,14 @@
     <meta charset="utf-8" />
 
     <script>
-        var app = angular.module("ListaTelefonica", []);
+        var app = angular.module("ListaTelefonica", ["ngMessages"]);
         app.controller("ListaTelefonicaController", function ($scope) {
 
             $scope.app = "Lista Telefonica";
 
             $scope.contatos =
             [
-                { nome: "Mike", telefone: "15997624783" ,cor:"blue"},
+                { nome: "Mike", telefone: "15997624783", cor: "blue" },
                  { nome: "Natali", telefone: "15997625451", cor: "pink" },
                   { nome: "Pedro", telefone: "159976265454", cor: "gray" }
             ];
@@ -66,6 +66,8 @@
                 $scope.contatos.push(contato);
                 // $scope.contatos.length;
                 delete $scope.contato;
+
+                $scope.contatoForm.$setPristine();
             }
 
             $scope.ApagarContatos = function (contatos) {
@@ -76,12 +78,12 @@
 
             }
             $scope.isContatoSelecionado = function (contatos) {
-            
+
                 return contatos.some(function (contato) {
-                  
+
                     return contato.selecionado;
                 })
-              
+
             }
 
         });/*  Fim  */
@@ -109,19 +111,48 @@
             </tr>
         </table>
         <hr />
-        <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome" />
+        <form name="contatoForm">
+            <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="3" />
 
-        <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone" />
+            <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true"
+                   ng-pattern="/^\d{4,5}-?\d{4}$/" />
 
-        <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
-            <option value="">Selecione um Operadora</option>
-        </select>
+            <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
+                <option value="">Selecione um Operadora</option>
+            </select>
+        </form>
 
-        <button class="btn btn-info btn-lg btn-block" ng-click="AddContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar</button>
+        <!-- Nova versão do angular 3.0 -->
+        <!--<div ng-messages="contatoForm.nome.$error">
+
+            <div ng-message="required" class="text text-danger">
+                Por favor, preencha o nome.
+            </div>
+            <div ng-message="minlength" class="text text-danger">
+                Por favor, o campo nome deve ter no mínimo 3 letras.
+            </div>
+        </div>-->
+
+
+
+        <!-- Mensagens de Erro -->
+        <div ng-show="contatoForm.telefone.$error.pattern" class="text text-danger">
+            Por favor, preencha o telefone corretamente 0000-0000.
+        </div>
+        <div ng-show="contatoForm.nome.$error.required && contatoForm.nome.$dirty" class="text text-danger">
+            Por favor, preencha o nome.
+        </div>
+        <div ng-show="contatoForm.nome.$error.minlength && contatoForm.nome.$dirty" class="text text-danger">
+            Por favor, o campo nome deve ter no mínimo 3 letras.
+        </div>
+        <div ng-show="contatoForm.telefone.$error.required  && contatoForm.telefone.$dirty" class="text text-danger">
+            Por favor, preencha o telefone.
+        </div>
+        <button class="btn btn-info btn-lg btn-block" ng-click="AddContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar</button>
         <br />
         <button class="btn btn-info btn-lg btn-danger" ng-click="ApagarContatos(contatos)" ng-disabled="!isContatoSelecionado(contatos)">Remover</button>
         <div ng-include="'footer.html'"></div>
-      </div>
-   
+
+
 </body>
 </html>
