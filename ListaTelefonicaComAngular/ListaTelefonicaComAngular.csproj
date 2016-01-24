@@ -66,10 +66,12 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ajax.html" />
-    <Content Include="backend\contatosBackend.js" />
-    <Content Include="contatosBackEnd.js" />
-    <Content Include="footer.html" />
+    <Content Include="View\Partial\ajax.html" />
+    <Content Include="Backend\contatosBackend.js" />
+    <Content Include="css\CustomStyle.css" />
+    <Content Include="View\Partial\footer.html" />
+    <Content Include="js\app.js" />
+    <Content Include="js\Controller\listaTlefonicaController.js" />
     <Content Include="packages.config" />
     <Content Include="Scripts\version.json" />
     <Content Include="Scripts\errors.json" />
@@ -85,8 +87,8 @@
     <Content Include="Scripts\angular-aria.min.js.map" />
     <Content Include="Scripts\angular-animate.min.js.map" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
-    <Content Include="contatos.json" />
-    <Content Include="operadoras.json" />
+    <Content Include="json\contatos.json" />
+    <Content Include="json\operadoras.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -100,7 +102,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="ListaTelefonica.html" />
+    <Content Include="View\ListaTelefonica.html" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria.js" />
@@ -888,6 +890,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
