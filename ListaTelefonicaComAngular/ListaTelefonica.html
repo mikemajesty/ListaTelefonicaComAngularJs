@@ -1,158 +1,138 @@
-﻿<!DOCTYPE html>
-<html ng-app="ListaTelefonica">
+﻿<html ng-app="listaTelefonica">
 <head>
-    <title>Lista telefonica</title>
-    <script src="Scripts/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Lista Telefonica</title>
+
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
-    <script src="Scripts/angular-messages.min.js"></script>
     <style>
         .jumbotron {
-            width: 500px;
+            width: 600px;
             text-align: center;
+            margin-top: 20px;
             margin-left: auto;
             margin-right: auto;
-            margin-top: 20px;
+        }
+
+        h3 {
+            margin-bottom: 30px;
         }
 
         .table {
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         .form-control {
-            width: 50%;
-            text-align: center;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 20px;
-        }
-
-        .btn-block {
-            width: 50%;
-            text-align: center;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 20px;
+            margin-bottom: 5px;
         }
 
         .selecionado {
             background-color: yellow;
         }
+
+        .negrito {
+            font-weight: bold;
+        }
+
+        hr {
+            border-color: #999;
+        }
     </style>
-    <meta charset="utf-8" />
-
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/angular-messages.min.js"></script>
+    <script src="backend/contatosBackend.js"></script>
     <script>
-        var app = angular.module("ListaTelefonica", ["ngMessages"]);
-        app.controller("ListaTelefonicaController", function ($scope,uppercaseFilter) {
-
-            $scope.app = "Lista Telefonica";
-
-            $scope.contatos =
-            [
-                { nome: uppercaseFilter("Mike"), telefone: "35997624783", data: new Date(), operadora: { nome: "OI", codigo: 1, preco: 2 }, cor: "blue" },
-                 { nome: "Natali", telefone: "15997625451", data: new Date(), operadora: { nome: "VIVO", codigo: 2, preco: 3 }, cor: "pink" },
-                  { nome: "Ana", telefone: "259976265454", data: new Date(), operadora: { nome: "CLARO", codigo: 3, preco: 4 }, cor: "gray" }
-            ];
-
-            $scope.operadoras =
-            [
-                { nome: "OI", codigo: 11, preco: 1 },
-                { nome: "TIM", codigo: 15, preco: 4 },
-                 { nome: "VIVO", codigo: 21, preco: 2 },
-                { nome: "CLARO", codigo: 36, preco: 3 }
-            ];
-
-            $scope.AddContato = function (contato) {
-
-                $scope.contatos.push(contato);
-                delete $scope.contato;
-                $scope.contatoForm.$setPristine();
-            }
-
-            $scope.ApagarContatos = function (contatos) {
-                $scope.contatos = contatos.filter(function (contato) {
-                    if (!contato.selecionado) return contato;
-                });
-
-            }
-            $scope.isContatoSelecionado = function (contatos) {
-                return contatos.some(function (contato) {
-                    return contato.selecionado;
-                })
-
-            }
-            $scope.ordenarPorClick = function (campo) {
-                //debugger;
-                $scope.criterioDeOrdenacao = campo;
-                $scope.direcaoOrdenacao = !$scope.direcaoOrdenacao;
-            }
-        });/*  Fim  */
-
-
+		angular.module("listaTelefonica", ["ngMessages"]);
+		angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope, $http) {
+			$scope.app = "Lista Telefonica";
+			$scope.contatos = [];
+			$scope.operadoras = [];
+			var carregarContatos = function () {
+			    $http.get("http://localhost:57851/contatos.json").success(function (data) {
+					$scope.contatos = data;
+				}).error(function (data, status) {
+					$scope.message = "Aconteceu um problema: " + data;
+				});
+			};
+			var carregarOperadoras = function () {
+			    $http.get("http://localhost:57851/operadoras.json").success(function (data) {
+					$scope.operadoras = data;
+				});
+			};
+			$scope.adicionarContato = function (contato) {
+				contato.data = new Date();
+				$http.post("http://localhost:57851/contatos", contato).success(function (data) {
+					delete $scope.contato;
+					$scope.contatoForm.$setPristine();
+					carregarContatos();
+				});
+			};
+			$scope.apagarContatos = function (contatos) {
+				$scope.contatos = contatos.filter(function (contato) {
+					if (!contato.selecionado) return contato;
+				});
+			};
+			$scope.isContatoSelecionado = function (contatos) {
+				return contatos.some(function (contato) {
+					return contato.selecionado;
+				});
+			};
+			$scope.ordenarPor = function (campo) {
+				$scope.criterioDeOrdenacao = campo;
+				$scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;
+			};
+			carregarContatos();
+			carregarOperadoras();
+		});
     </script>
 </head>
-<body>
-    <div ng-controller="ListaTelefonicaController" class="jumbotron">
-        <h4 ng-bind="app"></h4>
-        <input type="text" ng-model="criterioDeBusca" placeholder="Pesquise pelo nome" class="form-control" />
-        <table ng-show="contatos.length > 0" class="table table-condensed">
+<body ng-controller="listaTelefonicaCtrl">
+    <div class="jumbotron">
+        <h3>{{app}}</h3>
+        {{message}}
+        <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você está buscando?" />
+        <table ng-show="contatos.length > 0" class="table table-striped">
             <tr>
-                <th class="text-center label-success">Selecionar</th>
-                <th class="text-center label-success"><a href="" style="color:black" ng-click="ordenarPorClick('nome')" />Nome</th>
-                <th class="text-center label-success"><a href="" style="color:black" ng-click="ordenarPorClick('telefone')" />Telefone</th>
-                <th class="text-center label-success">Operadora</th>
-                <th class="text-center label-success">Data</th>
-                <th class="text-center label-success">Cores</th>
+                <th></th>
+                <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+                <th><a href="" ng-click="ordenarPor('telefone')">Telefone<a /></th>
+                <th>Operadora</th>
+                <th>Data</th>
             </tr>
-            <tr ng-repeat="contato in contatos | filter:{nome:criterioDeBusca} | orderBy:criterioDeOrdenacao:direcaoOrdenacao" ng-class="{selecionado: contato.selecionado}">
-                <th><input type="checkbox" ng-model="contato.selecionado" /> </th>
-                <td ng-bind="contato.nome"></td>
-                <td ng-bind="contato.telefone"></td>
-                <td ng-bind="contato.operadora.nome"></td>
-                <td ng-bind="contato.data | date:'MMMM EEEE dd/MM/yyyy HH:mm:ss'"></td>
-                <td><div style="width:50px; height:50px" ng-style="{'background-color': contato.cor}"></div> </td>
+            <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
+                <td><input type="checkbox" ng-model="contato.selecionado" /></td>
+                <td>{{contato.nome}}</td>
+                <td>{{contato.telefone}}</td>
+                <td>{{contato.operadora.nome}}</td>
+                <td>{{contato.data | date:'dd/MM/yyyy HH:mm'}}</td>
             </tr>
         </table>
         <hr />
         <form name="contatoForm">
-            <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="3" />
-
-            <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true"
-                   ng-pattern="/^\d{4,5}-?\d{4}$/" />
-
-            <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome +'('+ (operadora.preco | currency) +')' for operadora in operadoras | orderBy:'nome'">
-                <option value="">Selecione um Operadora</option>
+            <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10" />
+            <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
+            <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome + ' ( ' + (operadora.preco | currency) + ' )' for operadora in operadoras | orderBy:'nome'">
+                <option value="">Selecione uma operadora</option>
             </select>
-
         </form>
 
-        <!-- Nova versão do angular 3.0 -->
-        <!--<div ng-messages="contatoForm.nome.$error">
+        <div ng-show="contatoForm.nome.$dirty" ng-messages="contatoForm.nome.$error">
+            <div ng-message="required" class="alert alert-danger">
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger">
+                O campo nome deve ter no mínimo 10 caracteres.
+            </div>
+        </div>
 
-            <div ng-message="required" class="text text-danger">
-                Por favor, preencha o nome.
-            </div>
-            <div ng-message="minlength" class="text text-danger">
-                Por favor, o campo nome deve ter no mínimo 3 letras.
-            </div>
-        </div>-->
-        <!-- Mensagens de Erro -->
-        <div ng-show="contatoForm.telefone.$error.pattern" class="text text-danger">
-            Por favor, preencha o telefone corretamente 0000-0000.
+        <div ng-show="contatoForm.telefone.$error.required && contatoForm.telefone.$dirty" class="alert alert-danger">
+            Por favor, preencha o campo telefone!
         </div>
-        <div ng-show="contatoForm.nome.$error.required && contatoForm.nome.$dirty" class="text text-danger">
-            Por favor, preencha o nome.
+        <div ng-show="contatoForm.telefone.$error.pattern" class="alert alert-danger">
+            O campo telefone deve ter o formato DDDDD-DDDD.
         </div>
-        <div ng-show="contatoForm.nome.$error.minlength && contatoForm.nome.$dirty" class="text text-danger">
-            Por favor, o campo nome deve ter no mínimo 3 letras.
-        </div>
-        <div ng-show="contatoForm.telefone.$error.required  && contatoForm.telefone.$dirty" class="text text-danger">
-            Por favor, preencha o telefone.
-        </div>
-        <button class="btn btn-info btn-lg btn-block" ng-click="AddContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar</button>
-        <br />
-        <button class="btn btn-info btn-lg btn-danger" ng-click="ApagarContatos(contatos)" ng-disabled="!isContatoSelecionado(contatos)">Remover</button>
-        <div ng-include="'footer.html'"></div>
+        <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar Contato</button>
+        <button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-if="isContatoSelecionado(contatos)">Apagar Contatos</button>
     </div>
-
+    <div ng-include="'footer.html'"></div>
 </body>
 </html>

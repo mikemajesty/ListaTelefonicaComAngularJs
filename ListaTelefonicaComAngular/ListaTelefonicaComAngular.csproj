@@ -66,6 +66,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ajax.html" />
+    <Content Include="backend\contatosBackend.js" />
+    <Content Include="contatosBackEnd.js" />
     <Content Include="footer.html" />
     <Content Include="packages.config" />
     <Content Include="Scripts\version.json" />
@@ -82,6 +85,8 @@
     <Content Include="Scripts\angular-aria.min.js.map" />
     <Content Include="Scripts\angular-animate.min.js.map" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="contatos.json" />
+    <Content Include="operadoras.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
