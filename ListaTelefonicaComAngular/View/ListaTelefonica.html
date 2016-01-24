@@ -3,16 +3,17 @@
     <meta charset="UTF-8">
     <title>Lista Telefonica</title>
 
-    <link href="Content/bootstrap.min.css" rel="stylesheet" />
- 
-    <script src="Scripts/angular.min.js"></script>
-    <script src="Scripts/angular-messages.min.js"></script>
-    <script src="backend/contatosBackend.js"></script>
-    <link href="css/CustomStyle.css" rel="stylesheet" />
-    <script src="js/app.js"></script>
-    <script src="js/Controller/listaTlefonicaController.js"></script>
-
-
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="../Scripts/angular.min.js"></script>
+    <script src="../Scripts/angular-messages.min.js"></script>
+    <link href="../css/CustomStyle.css" rel="stylesheet" />
+    <script src="../js/app.js"></script>
+    <script src="../js/Services/contatosAPIService.js"></script>
+    <script src="../js/Controller/listaTlefonicaController.js"></script>    
+    <script src="../js/Services/operadorasAPIService.js"></script>
+    <script src="../js/Contants/configConst.js"></script>
+    <script src="../js/Services/serialGeneratorService.js"></script>
+    <script src="../js/config/serialGeneratorConfig.js"></script>
 </head>
 <body ng-controller="listaTelefonicaCtrl">
     <div class="jumbotron">
@@ -22,6 +23,7 @@
         <table ng-show="contatos.length > 0" class="table table-striped">
             <tr>
                 <th></th>
+                <th>Serial</th>
                 <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
                 <th><a href="" ng-click="ordenarPor('telefone')">Telefone<a /></th>
                 <th>Operadora</th>
@@ -29,6 +31,7 @@
             </tr>
             <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
                 <td><input type="checkbox" ng-model="contato.selecionado" /></td>
+                <td>{{contato.serial}}</td>
                 <td>{{contato.nome}}</td>
                 <td>{{contato.telefone}}</td>
                 <td>{{contato.operadora.nome}}</td>
@@ -62,6 +65,6 @@
         <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar Contato</button>
         <button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-if="isContatoSelecionado(contatos)">Apagar Contatos</button>
     </div>
-    <div ng-include="'footer.html'"></div>
+    <div ng-include="'./Partial/footer.html'"></div>
 </body>
 </html>

@@ -66,6 +66,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="js\config\serialGeneratorConfig.js" />
+    <Content Include="js\Services\contatosAPIService.js" />
+    <Content Include="js\Services\operadorasAPIService.js" />
+    <Content Include="js\Contants\configConst.js" />
     <Content Include="View\Partial\ajax.html" />
     <Content Include="Backend\contatosBackend.js" />
     <Content Include="css\CustomStyle.css" />
@@ -89,6 +93,7 @@
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="json\contatos.json" />
     <Content Include="json\operadoras.json" />
+    <Content Include="js\Services\serialGeneratorService.js" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
