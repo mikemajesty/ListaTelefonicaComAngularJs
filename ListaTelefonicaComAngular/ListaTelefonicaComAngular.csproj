@@ -66,7 +66,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\ui.css" />
     <Content Include="js\config\serialGeneratorConfig.js" />
+    <Content Include="js\Directives\uiAlertDirective.js" />
     <Content Include="js\Filters\ellipsisFilter.js" />
     <Content Include="js\Filters\nameFilter.js" />
     <Content Include="js\Services\contatosAPIService.js" />
@@ -75,6 +77,7 @@
     <Content Include="View\Partial\ajax.html" />
     <Content Include="Backend\contatosBackend.js" />
     <Content Include="css\CustomStyle.css" />
+    <Content Include="View\Partial\alert.html" />
     <Content Include="View\Partial\footer.html" />
     <Content Include="js\app.js" />
     <Content Include="js\Controller\listaTlefonicaController.js" />

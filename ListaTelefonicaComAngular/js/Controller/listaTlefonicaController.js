@@ -6,7 +6,7 @@
         contatosAPI.getContatos().success(function (data) {
             $scope.contatos = data;
         }).error(function (data, status) {
-            $scope.message = "Aconteceu um problema: " + data;
+            $scope.message = data + status;
         });
     };
     var carregarOperadoras = function () {
