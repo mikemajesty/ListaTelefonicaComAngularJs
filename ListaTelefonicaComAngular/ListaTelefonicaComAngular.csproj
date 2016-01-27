@@ -69,6 +69,7 @@
     <Content Include="css\ui.css" />
     <Content Include="js\config\serialGeneratorConfig.js" />
     <Content Include="js\Directives\uiAlertDirective.js" />
+    <Content Include="js\Directives\uiDateDirective.js" />
     <Content Include="js\Filters\ellipsisFilter.js" />
     <Content Include="js\Filters\nameFilter.js" />
     <Content Include="js\Services\contatosAPIService.js" />
