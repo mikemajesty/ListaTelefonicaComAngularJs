@@ -68,6 +68,7 @@
   <ItemGroup>
     <Content Include="css\ui.css" />
     <Content Include="js\config\serialGeneratorConfig.js" />
+    <Content Include="js\Directives\uiAccordionDirective.js" />
     <Content Include="js\Directives\uiAlertDirective.js" />
     <Content Include="js\Directives\uiDateDirective.js" />
     <Content Include="js\Filters\ellipsisFilter.js" />
@@ -75,6 +76,7 @@
     <Content Include="js\Services\contatosAPIService.js" />
     <Content Include="js\Services\operadorasAPIService.js" />
     <Content Include="js\Contants\configConst.js" />
+    <Content Include="View\Partial\accordion.html" />
     <Content Include="View\Partial\ajax.html" />
     <Content Include="Backend\contatosBackend.js" />
     <Content Include="css\CustomStyle.css" />
