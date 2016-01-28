@@ -73,6 +73,7 @@
     <Content Include="js\Directives\uiDateDirective.js" />
     <Content Include="js\Filters\ellipsisFilter.js" />
     <Content Include="js\Filters\nameFilter.js" />
+    <Content Include="js\serialGenerator\serialGenerator.js" />
     <Content Include="js\Services\contatosAPIService.js" />
     <Content Include="js\Services\operadorasAPIService.js" />
     <Content Include="js\Contants\configConst.js" />
